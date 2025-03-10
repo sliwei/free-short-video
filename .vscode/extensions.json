@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "yoavbls.pretty-ts-errors",
+    "bradlc.vscode-tailwindcss",
+    "expo.vscode-expo-tools",
+    "usernamehw.errorlens",
+    "wix.vscode-import-cost"
+  ]
+}
