@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { PlatformPressable, Text } from "@react-navigation/elements";
 import { useLinkBuilder } from "@react-navigation/native";
@@ -52,7 +52,8 @@ function MyTabBar({ state, descriptors, navigation }) {
             testID={options.tabBarButtonTestID}
             onPress={onPress}
             onLongPress={onLongPress}
-            className="h-[60] flex-1 items-center justify-center pb-2"
+            className="flex-1 items-center justify-center pb-2"
+            style={{ height: Platform.OS === "android" ? 49 : 83 }}
           >
             <Text style={{ color: isFocused ? "#FFFFFF" : "#999999" }}>
               {label}
