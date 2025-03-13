@@ -254,6 +254,7 @@ export default function HomeScreen() {
       drawerPosition={DrawerPosition.RIGHT}
       drawerType={DrawerType.FRONT}
       hideStatusBar={true}
+      edgeWidth={100}
       drawerWidth={width}
       onDrawerStateChanged={(newState, drawerWillShow) => {
         if (newState === 2) {
