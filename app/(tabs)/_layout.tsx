@@ -4,6 +4,7 @@ import { PlatformPressable, Text } from "@react-navigation/elements";
 import { useLinkBuilder } from "@react-navigation/native";
 
 import Index from "./index";
+import Home from "./home";
 import Profile from "./profile";
 
 const Tab = createBottomTabNavigator();
@@ -71,6 +72,13 @@ export default function TabLayout() {
       <Tab.Screen
         name="首页"
         component={Index}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen
+        name="Home"
+        component={Home}
         options={{
           headerShown: false,
         }}
