@@ -21,30 +21,30 @@ import { fetch } from "expo/fetch";
 import { Ionicons } from "@expo/vector-icons";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
-const v1 = require("@/assets/video/1.mp4");
-const v2 = require("@/assets/video/2.mp4");
-const v3 = require("@/assets/video/3.mp4");
-const v4 = require("@/assets/video/4.mp4");
-const v5 = require("@/assets/video/5.mp4");
+// const v1 = require("@/assets/video/1.mp4");
+// const v2 = require("@/assets/video/2.mp4");
+// const v3 = require("@/assets/video/3.mp4");
+// const v4 = require("@/assets/video/4.mp4");
+// const v5 = require("@/assets/video/5.mp4");
 
 interface Res<T = { [key: string]: any }> {
   code: number;
-  message: string;
-  payload: T;
+  msg: string;
+  data: T;
 }
 
-const videos = (page = 0) => {
-  // local
-  // return [v1, v2, v3, v4, v5];
-  // remote
-  return [
-    `http://192.168.125.116:3000/v1/${5 * page + 1}.mp4`,
-    `http://192.168.125.116:3000/v1/${5 * page + 2}.mp4`,
-    `http://192.168.125.116:3000/v1/${5 * page + 3}.mp4`,
-    `http://192.168.125.116:3000/v1/${5 * page + 4}.mp4`,
-    `http://192.168.125.116:3000/v1/${5 * page + 5}.mp4`,
-  ];
-};
+// const videos = (page = 0) => {
+//   // local
+//   // return [v1, v2, v3, v4, v5];
+//   // remote
+//   return [
+//     `http://192.168.125.116:3000/v1/${5 * page + 1}.mp4`,
+//     `http://192.168.125.116:3000/v1/${5 * page + 2}.mp4`,
+//     `http://192.168.125.116:3000/v1/${5 * page + 3}.mp4`,
+//     `http://192.168.125.116:3000/v1/${5 * page + 4}.mp4`,
+//     `http://192.168.125.116:3000/v1/${5 * page + 5}.mp4`,
+//   ];
+// };
 
 const { height, width } = Dimensions.get("window");
 
@@ -67,7 +67,7 @@ const VideoWrapper = ({
   const { index, item } = data;
   const { title, number, indexTitle, poster, url, index: vIndex } = item;
   const [image, setImage] = useState("");
-
+  // console.log("item", item, "http://192.168.125.116:3000" + url);
   const generateThumbnail = async () => {
     try {
       const { uri } = await VideoThumbnails.getThumbnailAsync(
@@ -187,6 +187,7 @@ export default function HomeScreen() {
   const [paused, setPaused] = useState(false);
   const lastPlayStatus = useRef(paused);
   const page = useRef(0);
+  const isLastPage = useRef(false);
 
   useEffect(() => {
     fetchMoreData();
@@ -207,7 +208,11 @@ export default function HomeScreen() {
   );
 
   const fetchMoreData = () => {
-    fetch("http://192.168.125.116:3000/api/recommend", {
+    if (isLastPage.current) {
+      console.log("没有更多数据了");
+      return;
+    }
+    fetch("http://192.168.125.116:3000/api/video/recommend", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -217,9 +222,10 @@ export default function HomeScreen() {
       .then((res) => {
         return res.json();
       })
-      .then((res: Res<any[]>) => {
-        console.log("res", res.payload);
-        setAllVideos([...allVideos, ...res.payload]);
+      .then((res: Res<any>) => {
+        console.log("res", res.data);
+        isLastPage.current = res.data.isLastPage;
+        setAllVideos([...allVideos, ...res.data.videos]);
         page.current += 1;
       });
   };
@@ -254,17 +260,17 @@ export default function HomeScreen() {
       drawerPosition={DrawerPosition.RIGHT}
       drawerType={DrawerType.FRONT}
       hideStatusBar={true}
-      edgeWidth={100}
+      edgeWidth={width}
       drawerWidth={width}
       onDrawerStateChanged={(newState, drawerWillShow) => {
-        if (newState === 2) {
-          if (drawerWillShow) {
-            lastPlayStatus.current = paused;
-            setPaused(true);
-          } else {
-            setPaused(lastPlayStatus.current);
-          }
-        }
+        // if (newState === 2) {
+        //   if (drawerWillShow) {
+        //     lastPlayStatus.current = paused;
+        //     setPaused(true);
+        //   } else {
+        //     setPaused(lastPlayStatus.current);
+        //   }
+        // }
       }}
     >
       <View style={{ flex: 1, backgroundColor: "black" }}>
